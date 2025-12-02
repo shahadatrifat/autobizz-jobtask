@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import { useSales } from '../hooks/useSales';
+import Filters from '../components/Filters';
+import SalesChart from '../components/SalesChart';
+import SalesTable from '../components/SalesTable';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 
 function Dashboard() {
   const [filters, setFilters] = useState({
@@ -36,36 +40,40 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Sales Dashboard</h1>
+      <div className="max-w-7xl mx-auto space-y-6">
+        <h1 className="text-3xl font-bold">Sales Dashboard</h1>
         
-        {/* Testing: Show data is loaded */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4"> Sales Data Loaded!</h2>
-          <div className="space-y-2">
-            <p className="text-gray-700">
-               Total Sales Records: <span className="font-bold">{data?.results?.Sales?.length}</span>
-            </p>
-            <p className="text-gray-700">
-               Total Sales Days: <span className="font-bold">{data?.results?.TotalSales?.length}</span>
-            </p>
-          </div>
-        </div>
+        {/* Filters */}
+        <Filters filters={filters} setFilters={setFilters} />
 
-        {/* We'll add components here next */}
-        <div className="mt-8 space-y-6">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold mb-2">🔍 Filters - Coming Next</h3>
-          </div>
-          
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold mb-2">📈 Chart - Coming Next</h3>
-          </div>
-          
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold mb-2">📋 Table - Coming Next</h3>
-          </div>
-        </div>
+        {/* Stats */}
+        <Card>
+          <CardHeader>
+            <CardTitle> Quick Stats</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-gray-600">Total Sales Records</p>
+                <p className="text-2xl font-bold text-blue-600">
+                  {data?.results?.Sales?.length || 0}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Total Sales Days</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {data?.results?.TotalSales?.length || 0}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Chart */}
+        <SalesChart data={data} />
+
+        {/* Table */}
+        <SalesTable data={data} filters={filters} setFilters={setFilters} />
       </div>
     </div>
   );
